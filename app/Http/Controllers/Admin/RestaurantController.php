@@ -63,10 +63,9 @@ class RestaurantController extends Controller
         $restaurant = new Restaurant();
 
         $restaurant->name = $validatedData['name'];
-        $restaurant->image = $validatedData['image'];
         $restaurant->description = $validatedData['description'];
         $restaurant->lowest_price = $validatedData['lowest_price'];
-        $restaurant->hight_price = $validatedData['hight_price'];
+        $restaurant->hight_price = $validatedData['highest_price'];
         $restaurant->postal_code = $validatedData['postal_code'];
         $restaurant->address = $validatedData['address'];
         $restaurant->opening_time = $validatedData['opening_time'];

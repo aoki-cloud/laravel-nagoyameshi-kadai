@@ -189,7 +189,7 @@ class RestaurantTest extends TestCase
          $admin->email = 'admin@example.com';
          $admin->password = Hash::make('nagoyameshi');
          $admin->save();
- 
+
          $restaurant_data = [
              'name' => 'テスト',
              'description' => 'テスト',
@@ -204,7 +204,9 @@ class RestaurantTest extends TestCase
  
          $response = $this->actingAs($admin, 'admin')->post(route('admin.restaurants.store'), $restaurant_data);
  
-         $response->assertRedirect(route('admin.restaurants.store'));
+         $restaurant = Restaurant::latest('id')->first();
+ 
+         $response->assertRedirect(route('admin.restaurants.index'));
      }
  
  
