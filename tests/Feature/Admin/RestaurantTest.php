@@ -190,6 +190,9 @@ class RestaurantTest extends TestCase
          $admin->password = Hash::make('nagoyameshi');
          $admin->save();
 
+         $categories = Category::factory()->count(3)->create();
+         $category_ids = $categories->pluck('id')->toArray();
+
          $restaurant_data = [
              'name' => 'テスト',
              'description' => 'テスト',
@@ -203,6 +206,9 @@ class RestaurantTest extends TestCase
          ];
  
          $response = $this->actingAs($admin, 'admin')->post(route('admin.restaurants.store'), $restaurant_data);
+
+         unset($restaurant_data['category_ids'], $restaurant_data['regular_holiday_ids']);
+         $this->assertDatabaseHas('restaurants', $restaurant_data);
  
          $restaurant = Restaurant::latest('id')->first();
  
@@ -313,6 +319,9 @@ class RestaurantTest extends TestCase
 
         $old_restaurant = Restaurant::factory()->create();
 
+        $categories = Category::factory()->count(3)->create();
+        $category_ids = $categories->pluck('id')->toArray();
+
         $new_restaurant_data = [
             'name' => 'テスト',
             'description' => 'テスト',
@@ -327,6 +336,7 @@ class RestaurantTest extends TestCase
 
         $response = $this->actingAs($admin, 'admin')->patch(route('admin.restaurants.update', $old_restaurant), $new_restaurant_data);
 
+        unset($new_restaurant_data['category_ids'], $new_restaurant_data['regular_holiday_ids']);
         $this->assertDatabaseHas('restaurants', $new_restaurant_data);
 
         $restaurant = Restaurant::latest('id')->first();
