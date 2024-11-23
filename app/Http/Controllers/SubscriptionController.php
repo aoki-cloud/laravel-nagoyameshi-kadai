@@ -8,8 +8,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Subscribed;
-use App\Nodels\NotSubscribed;
 
 class SubscriptionController extends Controller
 {
