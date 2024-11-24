@@ -25,35 +25,41 @@ use App\Http\Middleware\NotSubscribed;
 |
 */
 
+// 管理者としてログインしていない状態でアクセス可能
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::resource('restaurants', RestaurantController::class)->only(['index', 'show']);
+    // 一般ユーザーとしてログイン済みかつメール認証済み
     Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
-    });
-    Route::resource('restaurants', RestaurantController::class)->only(['index', 'show']);
+        Route::resource('restaurants.reviews', ReviewController::class)->only('index');
 
-    Route::group(['middleware' => [NotSubscribed::class]], function () {
-        Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
-        Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
-    });
+        // 有料プランに未登録
+        Route::group(['middleware' => [NotSubscribed::class]], function() {
+            Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+            Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
+        });
 
-    Route::group(['middleware' => [Subscribed::class]], function () {
-        Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
-        Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
-        Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
-        Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+        // 有料プランに登録済み
+        Route::group(['middleware' => [Subscribed::class]], function() {
+            Route::get('subscription/edit', [SubscriptionController::class, 'edit'])->name('subscription.edit');
+            Route::patch('subscription', [SubscriptionController::class, 'update'])->name('subscription.update');
+            Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+            Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+        });
+
     });
 });
 
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 
 require __DIR__.'/auth.php';
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function() {
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
     Route::resource('users', Admin\UserController::class)->only(['index', 'show']);
     Route::resource('restaurants', Admin\RestaurantController::class);
     Route::resource('categories', Admin\CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('company', Admin\CompanyController::class)->only(['index', 'edit', 'update']);
     Route::resource('terms', Admin\TermController::class)->only(['index', 'edit', 'update']);
-
 });

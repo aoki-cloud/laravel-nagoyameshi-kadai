@@ -55,4 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Restaurant::class);
     }
+
+    use Billable;
 }
