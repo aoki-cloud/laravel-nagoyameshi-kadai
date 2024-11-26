@@ -57,4 +57,9 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     use Billable;
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }
