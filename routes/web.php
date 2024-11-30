@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\HelloController;
 //use App\Http\Controllers\Admin\RestaurantController;
-use App\Http\Controllers\Admin\CompanyController;
+//use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
@@ -15,6 +15,7 @@ use App\Http\Middleware\Subscribed;
 use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CompanyController;
 
 
 /*
@@ -32,6 +33,12 @@ use App\Http\Controllers\FavoriteController;
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resource('restaurants', RestaurantController::class)->only(['index', 'show']);
+
+    //会社概要ページ
+    Route::get('company', [CompanyController::class, 'index'])->name('company.index');
+    //利用規約ページ
+    Route::get('terms', [TermController::class, 'index'])->name('terms.index');
+    
     // 一般ユーザーとしてログイン済みかつメール認証済み
     Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::resource('user', UserController::class)->only(['index', 'edit', 'update']);
