@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\HelloController;
 //use App\Http\Controllers\Admin\RestaurantController;
 //use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\TermController;
+//use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
@@ -16,6 +16,7 @@ use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TermController;
 
 
 /*
